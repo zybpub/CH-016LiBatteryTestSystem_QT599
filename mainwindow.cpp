@@ -1,6 +1,8 @@
 #include "mainwindow.h"
-#include "config.h"
+#include "configwindow.h"
 #include "ui_mainwindow.h"
+#include "settings.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,6 +12,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->menu_modify,SIGNAL(triggered()),this,SLOT(on_open_config_wind_clicked()));
      connect(ui->menu_close,SIGNAL(triggered()),this,SLOT(on_menu_close_clicked()));
+ connect(ui->actionabout,SIGNAL(triggered()),this,SLOT(on_about_triggered()));
+
+        connect(ui->actionabout,SIGNAL(triggered()),this,SLOT([=](){
+                     QDialog dlg(this);
+                     dlg.exec();
+                     qDebug() <<"模态窗体弹出";
+        }));
+
+//        connect(ui->pushButton_2, SIGNAL(pressed()), [=](){
+//            QDialog dlg(this);
+//            dlg.exec();
+//            qDebug() <<"模态窗体弹出";
+//        });
+
+//     connect(ui->actionabout,&QAction::triggered(true),[=](){
+//         QDialog dlg(this);
+//         dlg.exec();
+//         qDebug() <<"模态窗体弹出";
+//     });
 }
 
 MainWindow::~MainWindow()
@@ -29,6 +50,8 @@ void MainWindow::on_start_clicked()
     mSocket->connectToHost(ui->ipEdit->text(),ui->portEdit->text().toInt());
     //关联连接成功信号
     connect(mSocket,SIGNAL(connected()),this,SLOT(connect_suc()));
+    //关联连接出错信号（无法实际此功能）
+    connect(mSocket,SIGNAL(error()),this,SLOT(connect_fail()));
     //关联读数据信号
      connect(mSocket,SIGNAL(readyRead()),this,SLOT(read_data()));
      ui->start->setEnabled(false);
@@ -39,15 +62,41 @@ void MainWindow::connect_suc()
     QMessageBox::information(this,"提示","连接成功");
      ui->stop->setEnabled(true);
 }
-
+//连接失败
+void MainWindow::connect_fail()
+{
+    QMessageBox::critical(this,"错误","连接失败");
+     ui->stop->setEnabled(true);
+}
 //菜单打开配置窗体
 void MainWindow::on_open_config_wind_clicked()
 {
-    //conf = new config(); //子窗口类
-    //    conf->setWindowModality(Qt::ApplicationModal);
+    settings =new Settings(this);
+    settings->show();
+//    configwin=new ConfigWindow(this);
+//    configwin->setModal(true);
+//    configwin->show();
+//    QDialog dlg(this);
 
-    QMessageBox::information(this,"提示","连接成功");
-     ui->stop->setEnabled(true);
+//    dlg.exec();
+//    dlg.resize(600,400);
+//    qDebug() <<"模态窗体弹出";
+}
+
+void MainWindow::on_about_triggered()
+{
+    //模态窗体
+//    QDialog dlg(this);
+//    dlg.exec();
+//    qDebug() <<"模态窗体弹出";
+
+    //非模态
+    QDialog *dlgabout=new QDialog(this);
+    dlgabout->resize(400,300);
+    dlgabout->show();
+    qDebug() <<"非模态窗体弹出";
+
+
 }
 void MainWindow::on_menu_close_clicked()
 {
@@ -277,4 +326,9 @@ void MainWindow::on_pushButton_trigerBUS_clicked()
 void MainWindow::on_pushButton_clear_reply_clicked()
 {
     ui->recvmsg->clear();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+
 }

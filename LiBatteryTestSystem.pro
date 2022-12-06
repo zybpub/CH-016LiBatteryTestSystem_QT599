@@ -16,17 +16,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    config.cpp \
+    configwindow.cpp \
+    loginwindow.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    settings.cpp
 
 HEADERS += \
-    config.h \
-    mainwindow.h
+    configwindow.h \
+    loginwindow.h \
+    mainwindow.h \
+    settings.h
 
 FORMS += \
-    config.ui \
-    mainwindow.ui
+    configwindow.ui \
+    loginwindow.ui \
+    mainwindow.ui \
+    settings.ui
 
 RC_ICONS = logo.ico
 

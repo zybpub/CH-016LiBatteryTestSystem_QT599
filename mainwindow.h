@@ -10,6 +10,8 @@
 #include <QVector>
 #include <QMenu>
 #include <QAction>
+#include "configwindow.h"
+#include "settings.h"
 
 
 
@@ -29,10 +31,11 @@ private slots:
    //菜单槽
     void on_open_config_wind_clicked();
   void  on_menu_close_clicked();
-
+ void on_about_triggered();
 
     void on_start_clicked();
   void connect_suc();
+   void connect_fail();
      void read_data();
      void on_pushButton1260_clicked();
 
@@ -99,9 +102,12 @@ private slots:
      void on_pushButton_clear_reply_clicked();
 
      void debug(QString msg);
+     void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
-
+ConfigWindow *configwin;
+Settings *settings;
     QTcpSocket *mSocket;
     QTimer *mtimer;
     bool isServer;           //服务端为true,客户端为false
