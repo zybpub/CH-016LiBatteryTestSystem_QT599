@@ -11,6 +11,8 @@
 #include <QMenu>
 #include <QAction>
 
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -24,6 +26,11 @@ public:
     ~MainWindow();
 
 private slots:
+   //菜单槽
+    void on_open_config_wind_clicked();
+  void  on_menu_close_clicked();
+
+
     void on_start_clicked();
   void connect_suc();
      void read_data();
@@ -89,11 +96,12 @@ private slots:
 
      void on_pushButton_trigerBUS_clicked();
 
-
      void on_pushButton_clear_reply_clicked();
 
+     void debug(QString msg);
 private:
     Ui::MainWindow *ui;
+
     QTcpSocket *mSocket;
     QTimer *mtimer;
     bool isServer;           //服务端为true,客户端为false

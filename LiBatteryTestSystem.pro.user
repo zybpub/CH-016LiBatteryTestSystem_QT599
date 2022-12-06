@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.0, 2022-11-16T17:41:17. -->
+<!-- Written by QtCreator 4.11.0, 2022-12-05T10:40:34. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -287,8 +287,9 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:D:/qt_projects/LiBatteryTestSystem/LiBatteryTestSystem.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/qt_projects/LiBatteryTestSystem/LiBatteryTestSystem.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">LiBatteryTestSystem2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:E:/CH-016 lith battery test system/LiBatteryTestSystem/LiBatteryTestSystem.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">E:/CH-016 lith battery test system/LiBatteryTestSystem/LiBatteryTestSystem.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>

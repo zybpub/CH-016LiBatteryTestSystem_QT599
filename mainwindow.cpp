@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "config.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -6,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(ui->menu_modify,SIGNAL(triggered()),this,SLOT(on_open_config_wind_clicked()));
+     connect(ui->menu_close,SIGNAL(triggered()),this,SLOT(on_menu_close_clicked()));
 }
 
 MainWindow::~MainWindow()
@@ -13,6 +17,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void  MainWindow::debug(QString msg){
+     QMessageBox::information(this,"提示",msg);
+}
 
 void MainWindow::on_start_clicked()
 {
@@ -32,9 +39,22 @@ void MainWindow::connect_suc()
     QMessageBox::information(this,"提示","连接成功");
      ui->stop->setEnabled(true);
 }
-void debug(){
-   //  QMessageBox::information(this,"提示",msg);
+
+//菜单打开配置窗体
+void MainWindow::on_open_config_wind_clicked()
+{
+    //conf = new config(); //子窗口类
+    //    conf->setWindowModality(Qt::ApplicationModal);
+
+    QMessageBox::information(this,"提示","连接成功");
+     ui->stop->setEnabled(true);
 }
+void MainWindow::on_menu_close_clicked()
+{
+    QMessageBox::information(this,"提示","连接成功");
+     ui->stop->setEnabled(true);
+}
+
 //读数据
 void MainWindow::read_data()
 {
@@ -208,6 +228,7 @@ void MainWindow::on_btn_setChargeV_clicked()
 void MainWindow::on_btn_setChargeC_clicked()
 {
     QString msg = "BATT:CHAR:CURR "+ui->lineEdit_chargeC->text()+"\n";
+   // debug(msg);
    mSocket->write( msg.toUtf8());
 }
 
