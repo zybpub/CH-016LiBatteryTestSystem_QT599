@@ -14,6 +14,7 @@
 
 
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -25,7 +26,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+    //重写定时器的事件   虚函数 子类重写父类的虚函数
+     virtual void timerEvent(QTimerEvent *);
+ QTimer * timer;
 private slots:
    //菜单槽
     void on_open_config_wind_clicked();
@@ -103,9 +106,13 @@ private slots:
      void debug(QString msg);
      void on_pushButton_2_clicked();
 
+     void on_btn_send_command_clicked();
+
+     void on_pushButton_battOff_clicked();
+
 private:
     Ui::MainWindow *ui;
-Settings *settings;
+    Settings *settings;
     QTcpSocket *mSocket;
     QTimer *mtimer;
     bool isServer;           //服务端为true,客户端为false
@@ -117,5 +124,6 @@ Settings *settings;
 
     QVector <QTcpSocket *> clients; //容器用于存客户端套接字
     QAction *ac1,*ac2;
+    bool isRealData;  //是否发送测试实时值
 };
 #endif // MAINWINDOW_H

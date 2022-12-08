@@ -34,7 +34,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="lineEdit_ip"/>
     </item>
     <item>
      <widget class="QLabel" name="label_3">
@@ -44,7 +44,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="lineEdit_port">
       <property name="text">
        <string>30000</string>
       </property>

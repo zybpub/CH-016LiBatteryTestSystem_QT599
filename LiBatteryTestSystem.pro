@@ -27,7 +27,6 @@ HEADERS += \
     settings.h
 
 FORMS += \
-    configwindow.ui \
     loginwindow.ui \
     mainwindow.ui \
     settings.ui
