@@ -10,7 +10,6 @@
 #include <QVector>
 #include <QMenu>
 #include <QAction>
-#include "configwindow.h"
 #include "settings.h"
 
 
@@ -106,7 +105,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-ConfigWindow *configwin;
 Settings *settings;
     QTcpSocket *mSocket;
     QTimer *mtimer;
