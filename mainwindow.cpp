@@ -112,8 +112,9 @@ void MainWindow::on_about_triggered()
 }
 void MainWindow::on_menu_close_clicked()
 {
-    QMessageBox::information(this,"提示","连接成功");
-    ui->stop->setEnabled(true);
+//    QMessageBox::information(this,"提示","连接成功");
+//    ui->stop->setEnabled(true);
+    this->close();
 }
 
 //读数据
