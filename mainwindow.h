@@ -29,7 +29,7 @@ public:
     ~MainWindow();
     //重写定时器的事件   虚函数 子类重写父类的虚函数
     // virtual void timerEvent(QTimerEvent *);
- QTimer * timer;
+ QTimer * timer_meas;
  public slots:
  void config_wind_clicked();
  void menu_open_clicked();

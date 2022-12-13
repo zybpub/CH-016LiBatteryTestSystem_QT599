@@ -136,7 +136,7 @@ void MainWindow::connect_suc()
 
 
     msg = "SYST:REM?\n";
-    mSocket->write( msg.toUtf8());
+    send_cmd(msg);
 
     //休眠
 //    QEventLoop eventloop;
@@ -145,23 +145,22 @@ void MainWindow::connect_suc()
 
     QTimer::singleShot(2000, this, [=](){
         msg = "outp?\n";
-        mSocket->write( msg.toUtf8());
+       send_cmd(msg);
     });
 
     QTimer::singleShot(2000, this, [=](){
         qDebug()<<"等待2秒";
         //定时器
-        timer = new QTimer(this);
+        timer_meas = new QTimer(this);
         //启动定时器
-        timer->start(1000);
+        timer_meas->start(1000);
 
-        connect(timer,&QTimer::timeout,[=](){
+        connect(timer_meas,&QTimer::timeout,[=](){
             if (cmd_mode==false){
                 msg = "MEAS?\n";
                 send_cmd(msg);
                 isRealData=true;
             }
-
         });
     });
 
@@ -207,12 +206,15 @@ void MainWindow::menu_close_clicked()
 }
 void MainWindow::send_cmd(QString cmd){
     if (is_net_connected==false) on_start_clicked();
-    qDebug()<<cmd;
-
+  //  qDebug()<<cmd;
+   // timer_meas->stop();
+    cmd_mode=true;
      mSocket->write(cmd.toLatin1());
+    debug("发送指令:"+cmd);
 
-     QTimer::singleShot(2000, this, [=](){
+     QTimer::singleShot(3000, this, [=](){
          cmd_mode=false;
+      //   timer_meas->start(1000);
      });
 
 }
@@ -222,8 +224,8 @@ void MainWindow::read_data()
     //获取客户端IP
     QTcpSocket *obj = (QTcpSocket *)sender();
     QString rec = obj->readAll();
-     debug(msg);
-    debug(rec);
+     debug("收到指令:"+msg);
+    debug("仪表回复:"+rec);
     if (msg=="outp?\n"){
         if (rec=="1\n") {  //输出已打开
             ui->cb_outp_ison->setCheckState(Qt::Checked);
@@ -262,7 +264,7 @@ void MainWindow::read_data()
          QString peerIP = obj->peerAddress().toString().remove("::ffff:");
          ui->recvmsg->addItem(peerIP + ":" + rec);
         }
-         cmd_mode=false;
+       //  cmd_mode=false;
 //        //自动下滚
 //        ui->recvmsg->setCurrentRow(ui->recvmsg->count() - 1);
 //        //接收字节数
@@ -377,6 +379,10 @@ void MainWindow::on_pushButton_outpon_clicked()
 {
      msg = "outp on\n";
      send_cmd(msg);
+     QTimer::singleShot(5000, this, [=](){
+         msg = "outp?\n";
+         send_cmd(msg);
+     });
 
 }
 
@@ -384,6 +390,10 @@ void MainWindow::on_pushButton_outpoff_clicked()
 {
      msg = "outp off\n";
     send_cmd(msg);
+    QTimer::singleShot(5000, this, [=](){
+        msg = "outp?\n";
+        send_cmd(msg);
+    });
 }
 
 void MainWindow::on_pushButton_Pri_Vol_clicked()
