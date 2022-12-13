@@ -2,6 +2,12 @@
 #include "ui_mainwindow.h"
 #include "settings.h"
 #include <QFile>
+#include <QAction>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QByteArray>
+#include <QFile>
+#include <QJsonArray>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -9,106 +15,183 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    remote_control=false;
 
-    QFile file("config.ini");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
+//    connect(ui->menu_modify,&QAction::triggered,this,config_wind_clicked());
+//     connect(ui->menu_open,&QAction::triggered,this,menu_open_clicked());
+//    connect(ui->menu_close,&QAction::triggered,this,menu_close_clicked());
+//    connect(ui->menu_about,&QAction::triggered,this,about_triggered());
 
-    QTextStream conf(&file);
-    if (!conf.atEnd()) {
-        QString line = conf.readLine();
-        ui->lineEdit_ip->setText(line);
-        line = conf.readLine();
-        ui->lineEdit_port->setText(line);
-    }
     connect(ui->menu_modify,SIGNAL(triggered()),this,SLOT(config_wind_clicked()));
      connect(ui->menu_open,SIGNAL(triggered()),this,SLOT(menu_open_clicked()));
     connect(ui->menu_close,SIGNAL(triggered()),this,SLOT(menu_close_clicked()));
-    connect(ui->actionabout,SIGNAL(triggered()),this,SLOT(about_triggered()));
+    connect(ui->menu_about,SIGNAL(triggered()),this,SLOT(about_triggered()));
+
+    connect( ui->actionVer,&QAction::triggered,[=](){
+           QMessageBox::information(this,"软件版本","V1.0");
+        });
+
+    read_json_data();
+    //创建QTcpSocket对象，并初始化
+    mSocket = new QTcpSocket;
 }
+
+void MainWindow::read_json_data(){
+    QFile file("info.json");
+    file.open(QIODevice::ReadOnly);
+    QByteArray data=file.readAll();
+    file.close();
+
+    //解析
+    QJsonParseError parseError;
+    QString str=QString(data);
+    //qDebug()<<str;
+    QJsonDocument doc=QJsonDocument::fromJson(data,&parseError);
+    if(parseError.error!=QJsonParseError::NoError){
+        qDebug()<<"配置错误";
+        return;
+    }
+    obj=doc.object();
+    if(obj.contains("充电"))
+    {
+        QJsonValue Temp=obj.value("充电");
+        QJsonObject objs=Temp.toObject();
+
+        ui->lineEdit_chargeV->setText(objs.value("充电电压").toString());
+        ui->lineEdit_chargeC->setText(objs.value("充电电流").toString());
+        ui->lineEdit_chargeT->setText(objs.value("充电时间").toString());
+        ui->lineEdit_shutV->setText(objs.value("关断电压").toString());
+        ui->lineEdit_shutC->setText(objs.value("关断电流").toString());
+        ui->lineEdit_shutCap->setText(objs.value("关断容量").toString());
+
+//        QJsonValue genderTemp=objs.value("充电电流");
+//        QString gender=genderTemp.toString();
+
+//        QJsonValue chargeV=objs.value("充电时间");
+//        QString id=chargeV.toString();
+    }
+    if(obj.contains("放电"))
+    {
+        QJsonValue Temp=obj.value("放电");
+        QJsonObject objs=Temp.toObject();
+
+        ui->lineEdit_dischargeV->setText(objs.value("放电电压").toString());
+        ui->lineEdit_dischargeC->setText(objs.value("放电电流").toString());
+        ui->lineEdit_dischargeT->setText(objs.value("放电时间").toString());
+        ui->lineEdit_disshutV->setText(objs.value("关断电压").toString());
+        ui->lineEdit_disshutC->setText(objs.value("关断电流").toString());
+        ui->lineEdit_disCap->setText(objs.value("关断容量").toString());
+    }
+    if(obj.contains("网络设置"))
+    {
+        QJsonValue Temp=obj.value("网络设置");
+        QJsonObject objs=Temp.toObject();
+
+        ui->lineEdit_ip->setText(objs.value("ip").toString());
+        ui->lineEdit_port->setText(objs.value("端口").toString());
+    }
+
+
+}
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::timerEvent(QTimerEvent * ev)
-{
-    QString msg = "MEAS?\n";
-    mSocket->write( msg.toUtf8());
-    isRealData=true;
-}
+//void MainWindow::timerEvent(QTimerEvent * ev)
+//{
+//    QString msg = "MEAS?\n";
+//    mSocket->write( msg.toUtf8());
+//    isRealData=true;
+//}
 
-void  MainWindow::debug(QString msg){
-    QMessageBox::information(this,"提示",msg);
+void  MainWindow::debug(QString dmsg){
+    //QMessageBox::information(this,"提示",msg);
+    qDebug()<<dmsg;
 }
 
 void MainWindow::on_start_clicked()
 {
-    //创建QTcpSocket对象，并初始化
-    mSocket = new QTcpSocket;
+
     //发起连接connectToHost
     mSocket->connectToHost(ui->lineEdit_ip->text(),ui->lineEdit_port->text().toInt());
     //关联连接成功信号
     connect(mSocket,SIGNAL(connected()),this,SLOT(connect_suc()));
-    //关联连接出错信号（无法实际此功能）
-    connect(mSocket,SIGNAL(error()),this,SLOT(connect_fail()));
     //关联读数据信号
     connect(mSocket,SIGNAL(readyRead()),this,SLOT(read_data()));
     ui->start->setEnabled(false);
+
+
+
 }
 //连接成功
 void MainWindow::connect_suc()
 {
-    QMessageBox::information(this,"提示","连接成功");
+    is_net_connected=true;
+    ui->label_info->setText("连接成功");
+   // QMessageBox::information(this,"提示","连接成功");
     ui->stop->setEnabled(true);
 
-    //定时器第二种方式
-    timer = new QTimer(this);
-    //启动定时器
-    timer->start(1000);
 
-    connect(timer,&QTimer::timeout,[=](){
-        QString msg = "MEAS?\n";
+
+    msg = "SYST:REM?\n";
+    mSocket->write( msg.toUtf8());
+
+    //休眠
+//    QEventLoop eventloop;
+//    QTimer::singleShot(5000, &eventloop, SLOT(quit()));
+//    eventloop.exec();
+
+    QTimer::singleShot(2000, this, [=](){
+        msg = "outp?\n";
         mSocket->write( msg.toUtf8());
-        isRealData=true;
     });
 
+    QTimer::singleShot(2000, this, [=](){
+        qDebug()<<"等待2秒";
+        //定时器
+        timer = new QTimer(this);
+        //启动定时器
+        timer->start(1000);
+
+        connect(timer,&QTimer::timeout,[=](){
+            if (cmd_mode==false){
+                msg = "MEAS?\n";
+                send_cmd(msg);
+                isRealData=true;
+            }
+
+        });
+    });
+
+
 }
-//连接失败
-void MainWindow::connect_fail()
-{
-    QMessageBox::critical(this,"错误","连接失败");
-    ui->stop->setEnabled(true);
-}
+
 //菜单打开配置窗体
 void MainWindow::config_wind_clicked()
 {
     settings =new Settings(this);
     settings->show();
-    //    configwin=new ConfigWindow(this);
-    //    configwin->setModal(true);
-    //    configwin->show();
-    //    QDialog dlg(this);
-
-    //    dlg.exec();
-    //    dlg.resize(600,400);
-    //    qDebug() <<"模态窗体弹出";
 }
 
 void MainWindow::about_triggered()
 {
+
+
+    about =new About(this);
+    about->show();
+
     //模态窗体
     //    QDialog dlg(this);
     //    dlg.exec();
     //    qDebug() <<"模态窗体弹出";
 
     //非模态
-    QDialog *dlgabout=new QDialog(this);
-    dlgabout->resize(400,300);
-    dlgabout->show();
-    qDebug() <<"非模态窗体弹出";
-
-
+//    QDialog *dlgabout=new QDialog(this);
+//    dlgabout->resize(400,300);
+//    dlgabout->show();
+//    qDebug() <<"非模态窗体弹出";
 }
 void MainWindow::menu_open_clicked()
 {
@@ -122,16 +205,47 @@ void MainWindow::menu_close_clicked()
 //    ui->stop->setEnabled(true);
     this->close();
 }
+void MainWindow::send_cmd(QString cmd){
+    if (is_net_connected==false) on_start_clicked();
+    qDebug()<<cmd;
 
+     mSocket->write(cmd.toLatin1());
+
+     QTimer::singleShot(2000, this, [=](){
+         cmd_mode=false;
+     });
+
+}
 //读数据
 void MainWindow::read_data()
 {
     //获取客户端IP
     QTcpSocket *obj = (QTcpSocket *)sender();
-    QString msg = obj->readAll();
+    QString rec = obj->readAll();
+     debug(msg);
+    debug(rec);
+    if (msg=="outp?\n"){
+        if (rec=="1\n") {  //输出已打开
+            ui->cb_outp_ison->setCheckState(Qt::Checked);
+        }
+        else
+        {  //输出已关闭
+            ui->cb_outp_ison->setCheckState(Qt::Unchecked);
+        }
+        msg="";
+    }
+    if (msg=="SYST:REM?\n"){
+        if (rec=="1\n") {
+            ui->cb_remote_allowed->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            ui->cb_remote_allowed->setCheckState(Qt::Unchecked);
+        }
+    }
 
-    if (isRealData){  //显示当前实时测试值 12.6002,0.186036,2.34408,0.148254,1.86798
-        QStringList values=msg.split(",");
+    //if (isRealData){  //显示当前实时测试值 12.6002,0.186036,2.34408,0.148254,1.86798
+        QStringList values=rec.split(",");
         if (values.length()==5)
         {
             ui->lineEdit_realV->setText(values[0]);
@@ -139,26 +253,22 @@ void MainWindow::read_data()
             ui->lineEdit_realW->setText(values[2]);
             ui->lineEdit_realAH->setText(QString::number(values[3].toDouble(),'f',4));
             ui->lineEdit_realWH->setText(QString::number(values[4].toDouble(),'f',4));
-            isRealData=false;
-        }else
-        {
-              ui->recvmsg->addItem( msg);
-              SIGBREAK;
+
         }
-    }
-    else
-    {
-        QString peerIP = obj->peerAddress().toString().remove("::ffff:");
-        ui->recvmsg->addItem(peerIP + ":" + msg);
-        //自动下滚
-        ui->recvmsg->setCurrentRow(ui->recvmsg->count() - 1);
-        //接收字节数
-        recvsize += msg.size();
+//        isRealData=false;
+        else
+        {
+
+         QString peerIP = obj->peerAddress().toString().remove("::ffff:");
+         ui->recvmsg->addItem(peerIP + ":" + rec);
+        }
+         cmd_mode=false;
+//        //自动下滚
+//        ui->recvmsg->setCurrentRow(ui->recvmsg->count() - 1);
+//        //接收字节数
+//        recvsize += msg.size();
         // ui->recv_size->setText(QString::number(recvsize));
-    }
 }
-
-
 
 void MainWindow::on_stop_clicked()
 {
@@ -176,190 +286,190 @@ void MainWindow::on_stop_clicked()
 void MainWindow::on_pushButton1260_clicked()
 {
     // QString msg = ui->sendmsg->toPlainText();
-    QString msg = "volt 12.60\n";
-    //mSocket->write(msg.toUtf8());
-    mSocket->write( msg.toLatin1());
+    msg = "volt 12.60\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton1500_clicked()
 {
-    QString msg = "volt 14.90\r\n";
-    mSocket->write(msg.toLatin1());
+    msg = "volt 15.00\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_displayError_clicked()
 {
-    QString msg = "syst:err?\n";
-    //mSocket->write(msg.toUtf8());
-    mSocket->write( msg.toLatin1());
+    msg = "syst:err?\n";
+    send_cmd(msg);
 
 }
 
 void MainWindow::on_pushButton_DeviceInfo_clicked()
 {
-    QString msg = "*idn?\n";
-    mSocket->write( msg.toUtf8());
+     msg = "*idn?\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_DeviceInfo_2_clicked()
 {
-    QString msg = "SYST:REM\n";
-    mSocket->write( msg.toUtf8());
+    msg = "SYST:REM\n";
+   send_cmd(msg);
+    remote_control=true;
+    on_pushButton_query_remote_clicked();
 }
 
 void MainWindow::on_pushButton_500_clicked()
 {
-    QString msg = "volt 5.00\n";
-    mSocket->write(msg.toLatin1());
+     msg = "volt 5.00\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_btn_setV_clicked()
 {
-    QString msg ="volt "+ ui->lineEdit_Vset->text()+"\n";
+     msg ="volt "+ ui->lineEdit_Vset->text()+"\n";
     // mSocket->write( msg.toLatin1());
-    mSocket->write( msg.toUtf8());
+     send_cmd(msg);
 }
 
 void MainWindow::on_btn_setC_clicked()
 {
-    QString msg ="Curr "+ ui->lineEdit_Cset->text()+"\n";
-    QMessageBox::information(this,"提示",msg);
-    mSocket->write( msg.toLatin1());
+    msg ="Curr "+ ui->lineEdit_Cset->text()+"\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_DeviceInfo_3_clicked()
 {
-    QString msg = "SYST:LOC\n";
-    mSocket->write( msg.toUtf8());
+     msg = "SYST:LOC\n";
+    send_cmd(msg);
+    on_pushButton_query_remote_clicked();
 }
 
 void MainWindow::on_pushButton_MeaCurr_clicked()
 {
-    QString msg = "MEAS:CURR?\n";
-    mSocket->write( msg.toUtf8());
+     msg = "MEAS:CURR?\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_MeaPow_clicked()
 {
-    QString msg = "MEAS:POW?\n";
-    mSocket->write( msg.toUtf8());
+     msg = "MEAS:POW?\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_MeaVol_clicked()
 {
-    QString msg = "MEAS:VOLT?\n";
-    mSocket->write( msg.toUtf8());
+     msg = "MEAS:VOLT?\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_MeaCap_clicked()
 {
-    QString msg = "MEAS:CAP?\n";
-    mSocket->write( msg.toUtf8());
+     msg = "MEAS:CAP?\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    QString msg = "MEAS?\n";
-    mSocket->write( msg.toUtf8());
+     msg = "MEAS?\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_outpon_clicked()
 {
-    QString msg = "outp on\n";
-    mSocket->write( msg.toUtf8());
+     msg = "outp on\n";
+     send_cmd(msg);
+
 }
 
 void MainWindow::on_pushButton_outpoff_clicked()
 {
-    QString msg = "outp off\n";
-    mSocket->write( msg.toUtf8());
+     msg = "outp off\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_Pri_Vol_clicked()
 {
-    QString msg = "FUNC:PRI VOLT\n";
-    mSocket->write( msg.toUtf8());
+     msg = "FUNC:PRI VOLT\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_Pri_Cur_clicked()
 {
-    QString msg = "FUNC:PRI Curr\n";
-    mSocket->write( msg.toUtf8());
+     msg = "FUNC:PRI Curr\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_OutpDelay_clicked()
 {
-    QString msg = "time on\n";
-    mSocket->write( msg.toUtf8());
+     msg = "time on\n";
+  send_cmd(msg);
     msg = "time del"+ui->lineEdit_Cset->text()+"\n";
-    mSocket->write( msg.toUtf8());
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_shutPWM_clicked()
 {
-    QString msg = "PWM OFF\n";
-    mSocket->write( msg.toUtf8());
+     msg = "PWM OFF\n";
+   send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_trigerKey_clicked()
 {
-    QString msg = "TRIG:BATT:SOUR KEYP\n";
-    mSocket->write( msg.toUtf8());
+     msg = "TRIG:BATT:SOUR KEYP\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_btn_setChargeV_clicked()
 {
-    QString msg = "BATT:CHAR:VOLT "+ui->lineEdit_chargeV->text()+"\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT:CHAR:VOLT "+ui->lineEdit_chargeV->text()+"\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_btn_setChargeC_clicked()
 {
-    QString msg = "BATT:CHAR:CURR "+ui->lineEdit_chargeC->text()+"\n";
-    // debug(msg);
-    mSocket->write( msg.toUtf8());
+     msg = "BATT:CHAR:CURR "+ui->lineEdit_chargeC->text()+"\n";
+   send_cmd(msg);
 }
 
 void MainWindow::on_btn_setChargeT_clicked()
 {
-    QString msg = "BATT:SHUT:TIME "+ui->lineEdit_chargeT->text()+"\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT:SHUT:TIME "+ui->lineEdit_chargeT->text()+"\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_btn_shutV_clicked()
 {
-    QString msg = "BATT:SHUT:VOLT "+ui->lineEdit_shutV->text()+"\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT:SHUT:VOLT "+ui->lineEdit_shutV->text()+"\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_btn_shutC_clicked()
 {
-    QString msg = "BATT:SHUT:CURR "+ui->lineEdit_shutC->text()+"\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT:SHUT:CURR "+ui->lineEdit_shutC->text()+"\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_btn_shutCap_clicked()
 {
-    QString msg = "BATT:SHUT:CAP "+ui->lineEdit_shutCap->text()+"\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT:SHUT:CAP "+ui->lineEdit_shutCap->text()+"\n";
+   send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_battOn_clicked()
 {
-    QString msg = "BATT ON\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT ON\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_busTrig_clicked()
 {
-    QString msg = "TRIG\n";
-    mSocket->write( msg.toUtf8());
+     msg = "TRIG\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_trigerBUS_clicked()
 {
-    QString msg = "TRIG:BATT:SOUR BUS\n";
-    mSocket->write( msg.toUtf8());
+     msg = "TRIG:BATT:SOUR BUS\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_clear_reply_clicked()
@@ -367,34 +477,182 @@ void MainWindow::on_pushButton_clear_reply_clicked()
     ui->recvmsg->clear();
 }
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    QString msg = "MEAS?\n";
-    mSocket->write( msg.toUtf8());
-    isRealData=true;
-}
+//void MainWindow::on_pushButton_2_clicked()
+//{
+//    QString msg = "MEAS?\n";
+//    mSocket->write( msg.toUtf8());
+//    isRealData=true;
+//}
 
 void MainWindow::on_btn_send_command_clicked()
 {
-    QString msg = ui->lineEdit_command->text().toUtf8() +  "\n";
-    mSocket->write( msg.toUtf8());
+     msg = ui->lineEdit_command->text().toUtf8() +  "\n";
+     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_battOff_clicked()
 {
-    QString msg = "BATT OFF\n";
-    mSocket->write( msg.toUtf8());
+     msg = "BATT OFF\n";
+    send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_save_clicked()
 {
-    QFile file("config.ini");
+    QJsonObject net;
 
-    file.open(QIODevice::WriteOnly);
-   file.write(ui->lineEdit_ip->text().toUtf8());
-   file.write("\n");
-    file.write(ui->lineEdit_port->text().toUtf8());
+    net.insert("ip",QJsonValue(ui->lineEdit_ip->text()));
+    net.insert("端口",QJsonValue(ui->lineEdit_port->text()));
+
+    obj["网络设置"]=QJsonValue(net);
+
+    //写入到文件，名字为info.json
+    QJsonDocument doc(obj);
+    QByteArray data=doc.toJson();
+    QFile file("info.json");
+    bool ok=file.open(QIODevice::WriteOnly);
+    if(ok)
+    {
+        file.write(data);
+        file.close();
+         qDebug()<<"write succ!"<<endl;
+          QMessageBox::information(this,"提示","保存成功");
+    }
+    else
+    {
+        qDebug()<<"write error!"<<endl;
+         QMessageBox::information(this,"提示","保存失败");
+    }
 
 
-    QMessageBox::information(this,"提示","保存成功");
+
+}
+void MainWindow::on_pushButton_save_charge_clicked()
+{
+   QJsonObject charge;
+
+   charge.insert("充电电压",QJsonValue(ui->lineEdit_chargeV->text()));
+   charge.insert("充电电流",QJsonValue(ui->lineEdit_chargeC->text()));
+   charge.insert("充电时间",QJsonValue(ui->lineEdit_chargeT->text()));
+
+   charge.insert("关断电压",QJsonValue(ui->lineEdit_shutV->text()));
+   charge.insert("关断电流",QJsonValue(ui->lineEdit_shutC->text()));
+   charge.insert("关断容量",QJsonValue(ui->lineEdit_shutCap->text()));
+
+
+   obj["充电"]=QJsonValue(charge);
+
+   //写入到文件，名字为info.json
+   QJsonDocument doc(obj);
+   QByteArray data=doc.toJson();
+   QFile file("info.json");
+   bool ok=file.open(QIODevice::WriteOnly);
+   if(ok)
+   {
+       file.write(data);
+       file.close();
+        qDebug()<<"write succ!"<<endl;
+         QMessageBox::information(this,"提示","保存成功");
+   }
+   else
+   {
+       qDebug()<<"write error!"<<endl;
+        QMessageBox::information(this,"提示","保存失败");
+   }
+
+}
+void MainWindow::on_pushButton_save_discharge_clicked()
+{
+    QJsonObject charge;
+
+    charge.insert("放电电压",QJsonValue(ui->lineEdit_dischargeV->text()));
+    charge.insert("放电电流",QJsonValue(ui->lineEdit_dischargeC->text()));
+    charge.insert("放电时间",QJsonValue(ui->lineEdit_dischargeT->text()));
+
+    charge.insert("关断电压",QJsonValue(ui->lineEdit_disshutV->text()));
+    charge.insert("关断电流",QJsonValue(ui->lineEdit_disshutC->text()));
+    charge.insert("关断容量",QJsonValue(ui->lineEdit_disCap->text()));
+
+
+    obj["放电"]=QJsonValue(charge);
+
+    //写入到文件，名字为info.json
+    QJsonDocument doc(obj);
+    QByteArray data=doc.toJson();
+    QFile file("info.json");
+    bool ok=file.open(QIODevice::WriteOnly);
+    if(ok)
+    {
+        file.write(data);
+        file.close();
+         qDebug()<<"write succ!"<<endl;
+          QMessageBox::information(this,"提示","保存成功");
+    }
+    else
+    {
+        qDebug()<<"write error!"<<endl;
+         QMessageBox::information(this,"提示","保存失败");
+    }
+}
+
+
+
+void MainWindow::on_pushButton_battOn_discharge_clicked()
+{
+    msg = "BATT ON\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_pushButton_battOff__discharge_clicked()
+{
+    msg = "BATT OFF\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_cb_remote_allowed_stateChanged(int arg1)
+{
+    debug(QString(arg1));
+    //第一种
+       if(arg1 == 2) //表示被选中
+       {
+//           msg = "SYST:LOC\n";
+//           send_cmd(msg);
+//           remote_control=true;
+       }
+       else if(arg1 == 0)
+       {
+//           msg = "SYST:REM\n";
+//            send_cmd(msg);
+//           remote_control=false;
+       }
+}
+
+void MainWindow::on_pushButton_query_remote_clicked()
+{
+    msg = "SYST:REM?\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_cb_outp_ison_stateChanged(int arg1)
+{
+    debug(QString(arg1));
+    //第一种
+       if(arg1 == 2) //表示被选中
+       {
+//           msg = "outp on\n";
+//           send_cmd(msg);
+//           remote_control=true;
+       }
+       else if(arg1 == 0)
+       {
+
+//           msg = "outp off\n";
+//           send_cmd(msg);
+//           remote_control=false;
+       }
+}
+
+void MainWindow::on_pushButton_query_outp_clicked()
+{
+    msg = "outp?\n";
+    send_cmd(msg);
 }

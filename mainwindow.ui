@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton1260">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>100</y>
+      <x>20</x>
+      <y>90</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="pushButton1500">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>140</y>
+      <x>20</x>
+      <y>120</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="pushButton_DeviceInfo">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>300</y>
+      <x>20</x>
+      <y>290</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -56,8 +56,8 @@
    <widget class="QPushButton" name="pushButton_displayError">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>340</y>
+      <x>20</x>
+      <y>330</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -70,7 +70,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>480</y>
+      <y>510</y>
       <width>621</width>
       <height>111</height>
      </rect>
@@ -80,7 +80,7 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>460</y>
+      <y>490</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -92,8 +92,8 @@
    <widget class="QPushButton" name="pushButton_DeviceInfo_2">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>190</y>
+      <x>20</x>
+      <y>210</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -118,8 +118,8 @@
    <widget class="QPushButton" name="pushButton_500">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>70</y>
+      <x>20</x>
+      <y>60</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -222,8 +222,8 @@
    <widget class="QPushButton" name="pushButton_DeviceInfo_3">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>220</y>
+      <x>20</x>
+      <y>240</y>
       <width>141</width>
       <height>23</height>
      </rect>
@@ -236,7 +236,7 @@
     <property name="geometry">
      <rect>
       <x>280</x>
-      <y>450</y>
+      <y>480</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -249,7 +249,7 @@
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>450</y>
+      <y>480</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -262,7 +262,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>450</y>
+      <y>480</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -275,7 +275,7 @@
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>450</y>
+      <y>480</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -287,8 +287,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>420</y>
+      <x>190</x>
+      <y>450</y>
       <width>251</width>
       <height>23</height>
      </rect>
@@ -401,336 +401,11 @@
      <string>秒</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>170</y>
-      <width>391</width>
-      <height>221</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>关闭充电测试功能</string>
-    </property>
-    <widget class="QPushButton" name="pushButton_shutPWM">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>20</y>
-       <width>75</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>关闭PWM</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_trigerKey">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>20</y>
-       <width>101</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>设置按键触发</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_10">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>54</width>
-       <height>12</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>充电电压</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_chargeV">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>60</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>15.00</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_setChargeV">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>60</y>
-       <width>51</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_setChargeC">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>90</y>
-       <width>51</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_chargeC">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>90</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>2.00</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_11">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>100</y>
-       <width>54</width>
-       <height>12</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>充电电流</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_12">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>130</y>
-       <width>54</width>
-       <height>12</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>充电时间</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_setChargeT">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>120</y>
-       <width>51</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_chargeT">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>120</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>30</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_shutCap">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>120</y>
-       <width>51</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_shutCap">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>120</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>1</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_shutV">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>60</y>
-       <width>51</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_shutV">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>60</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>16.00</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_16">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>100</y>
-       <width>54</width>
-       <height>12</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>关断电流</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_17">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>130</y>
-       <width>54</width>
-       <height>12</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>关断容量</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btn_shutC">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>90</y>
-       <width>51</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_shutC">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>90</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>0.05</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_18">
-     <property name="geometry">
-      <rect>
-       <x>210</x>
-       <y>70</y>
-       <width>54</width>
-       <height>12</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>关断电压</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_battOn">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>160</y>
-       <width>101</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>开启充电模式</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_busTrig">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>190</y>
-       <width>91</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>充电BUS触发</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_trigerBUS">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>20</y>
-       <width>101</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>设置BUS触发</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_battOff">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>160</y>
-       <width>101</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>关闭充电模式</string>
-     </property>
-    </widget>
-   </widget>
    <widget class="QPushButton" name="pushButton_clear_reply">
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>480</y>
+      <y>510</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -744,7 +419,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>501</width>
+      <width>631</width>
       <height>41</height>
      </rect>
     </property>
@@ -832,6 +507,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="label_info">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -888,10 +570,10 @@
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>90</y>
+      <x>790</x>
+      <y>30</y>
       <width>181</width>
-      <height>201</height>
+      <height>261</height>
      </rect>
     </property>
     <widget class="QLineEdit" name="lineEdit_realA">
@@ -1143,18 +825,710 @@
       <string>瓦时</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_35">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>远程修改</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_remote_allowed">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>200</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>允许</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_36">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>输出</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="cb_outp_ison">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>220</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>已打开</string>
+     </property>
+    </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>40</y>
+      <x>220</x>
+      <y>170</y>
+      <width>391</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>充电</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_setChargeC">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>70</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_setChargeV">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>30</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shutC">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>70</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shutCap">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>120</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_18">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>40</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关断电压</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>充电电压</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>充电时间</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_battOff">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>180</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关闭充电模式</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_setChargeT">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>120</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_busTrig">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>150</y>
+        <width>91</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>充电BUS触发</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_battOn">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>180</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>开启充电模式</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_shutCap">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>120</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_shutC">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>70</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0.05</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_16">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>80</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关断电流</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_chargeV">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>30</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>15.00</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_chargeC">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>70</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>2.00</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shutV">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>30</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>充电电流</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_chargeT">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>120</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>30</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_17">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>130</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关断容量</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_shutV">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>30</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>16.00</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_save_charge">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>150</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>保存设置</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>放电</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_setChargeV_2">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>20</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shutC_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>60</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shutCap_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>110</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_29">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>30</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关断电压</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_30">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>放电电压</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_31">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>放电时间</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_battOff__discharge">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>170</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关闭放电模式</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_setChargeT_2">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>110</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_battOn_discharge">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>170</y>
+        <width>111</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>开启放电模式</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_disCap">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>110</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_disshutC">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>60</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>0.05</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_32">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>70</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关断电流</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_dischargeV">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>20</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>15.00</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_setChargeC_2">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>60</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_dischargeC">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>60</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>2.00</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_33">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>放电电流</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_shutV_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>20</y>
+        <width>51</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>确定</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_dischargeT">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>110</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>30</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_34">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>120</y>
+        <width>54</width>
+        <height>12</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>关断容量</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_disshutV">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>20</y>
+        <width>51</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>16.00</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_save_discharge">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>140</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>保存设置</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButton_shutPWM">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>360</y>
       <width>75</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>关闭PWM</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_trigerKey">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>390</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>设置按键触发</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_trigerBUS">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>420</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>设置BUS触发</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_query_remote">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>180</y>
+      <width>141</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>查询远程修改控制</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_query_outp">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>110</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>查询输出</string>
     </property>
    </widget>
   </widget>
@@ -1184,7 +1558,8 @@
     <property name="title">
      <string>帮助</string>
     </property>
-    <addaction name="actionabout"/>
+    <addaction name="menu_about"/>
+    <addaction name="actionVer"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_config"/>
@@ -1218,9 +1593,14 @@
     <string>打开</string>
    </property>
   </action>
-  <action name="actionabout">
+  <action name="menu_about">
    <property name="text">
     <string>关于</string>
+   </property>
+  </action>
+  <action name="actionVer">
+   <property name="text">
+    <string>软件版本</string>
    </property>
   </action>
  </widget>
