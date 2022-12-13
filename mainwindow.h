@@ -29,11 +29,14 @@ public:
     //重写定时器的事件   虚函数 子类重写父类的虚函数
      virtual void timerEvent(QTimerEvent *);
  QTimer * timer;
+ public slots:
+ void config_wind_clicked();
+ void menu_open_clicked();
+void  menu_close_clicked();
+void about_triggered();
 private slots:
    //菜单槽
-    void on_open_config_wind_clicked();
-  void  on_menu_close_clicked();
- void on_about_triggered();
+
 
     void on_start_clicked();
   void connect_suc();
@@ -109,6 +112,8 @@ private slots:
      void on_btn_send_command_clicked();
 
      void on_pushButton_battOff_clicked();
+
+     void on_pushButton_save_clicked();
 
 private:
     Ui::MainWindow *ui;

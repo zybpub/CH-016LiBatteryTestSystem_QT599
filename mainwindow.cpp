@@ -21,10 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
         line = conf.readLine();
         ui->lineEdit_port->setText(line);
     }
-
-    connect(ui->menu_modify,SIGNAL(triggered()),this,SLOT(on_open_config_wind_clicked()));
-    connect(ui->menu_close,SIGNAL(triggered()),this,SLOT(on_menu_close_clicked()));
-    connect(ui->actionabout,SIGNAL(triggered()),this,SLOT(on_about_triggered()));
+    connect(ui->menu_modify,SIGNAL(triggered()),this,SLOT(config_wind_clicked()));
+     connect(ui->menu_open,SIGNAL(triggered()),this,SLOT(menu_open_clicked()));
+    connect(ui->menu_close,SIGNAL(triggered()),this,SLOT(menu_close_clicked()));
+    connect(ui->actionabout,SIGNAL(triggered()),this,SLOT(about_triggered()));
 }
 
 MainWindow::~MainWindow()
@@ -81,7 +81,7 @@ void MainWindow::connect_fail()
     ui->stop->setEnabled(true);
 }
 //菜单打开配置窗体
-void MainWindow::on_open_config_wind_clicked()
+void MainWindow::config_wind_clicked()
 {
     settings =new Settings(this);
     settings->show();
@@ -95,7 +95,7 @@ void MainWindow::on_open_config_wind_clicked()
     //    qDebug() <<"模态窗体弹出";
 }
 
-void MainWindow::on_about_triggered()
+void MainWindow::about_triggered()
 {
     //模态窗体
     //    QDialog dlg(this);
@@ -110,9 +110,15 @@ void MainWindow::on_about_triggered()
 
 
 }
-void MainWindow::on_menu_close_clicked()
+void MainWindow::menu_open_clicked()
 {
-//    QMessageBox::information(this,"提示","连接成功");
+    QMessageBox::information(this,"提示","连接成功");
+//    ui->stop->setEnabled(true);
+    this->close();
+}
+void MainWindow::menu_close_clicked()
+{
+    QMessageBox::information(this,"提示","连接成功");
 //    ui->stop->setEnabled(true);
     this->close();
 }
@@ -378,4 +384,17 @@ void MainWindow::on_pushButton_battOff_clicked()
 {
     QString msg = "BATT OFF\n";
     mSocket->write( msg.toUtf8());
+}
+
+void MainWindow::on_pushButton_save_clicked()
+{
+    QFile file("config.ini");
+
+    file.open(QIODevice::WriteOnly);
+   file.write(ui->lineEdit_ip->text().toUtf8());
+   file.write("\n");
+    file.write(ui->lineEdit_port->text().toUtf8());
+
+
+    QMessageBox::information(this,"提示","保存成功");
 }

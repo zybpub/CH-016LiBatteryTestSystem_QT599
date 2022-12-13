@@ -744,7 +744,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>401</width>
+      <width>501</width>
       <height>41</height>
      </rect>
     </property>
@@ -765,7 +765,7 @@
         </size>
        </property>
        <property name="text">
-        <string>192.168.123.4</string>
+        <string>192.168.123.11</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -807,6 +807,13 @@
        </property>
        <property name="placeholderText">
         <string>请输入端口号</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_save">
+       <property name="text">
+        <string>保存</string>
        </property>
       </widget>
      </item>
