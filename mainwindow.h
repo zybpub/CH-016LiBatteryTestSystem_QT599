@@ -54,7 +54,8 @@ private:
     bool remote_control;
     bool is_net_connected;
     bool cmd_mode;
-     QJsonObject obj;
+     QJsonObject obj_main;
+       QJsonObject obj_battype;
     QString msg; //发送到仪表的指令
 
 
@@ -145,5 +146,18 @@ void read_json_data();
      void on_pushButton_query_remote_clicked();
      void on_cb_outp_ison_stateChanged(int arg1);
      void on_pushButton_query_outp_clicked();
+     void on_checkBox_RealDisp_stateChanged(int arg1);
+     void on_pushButton_QueryBatMode_clicked();
+     void on_pushButton_OpenUrl_clicked();
+     void on_comboBox_currentTextChanged(const QString &arg1);
+     void on_comboBox_BatType_currentTextChanged(const QString &arg1);
+     void on_btn_setDisChargeV_clicked();
+     void on_btn_DisshutV_clicked();
+     void on_btn_setDisChargeC_clicked();
+     void on_btn_DisshutC_clicked();
+     void on_btn_setDisChargeT_clicked();
+     void on_btn_DisshutCap_clicked();
+     void on_pushButton_OneKeyCharge_clicked();
+     void on_pushButton_OneKeyDisCharge_clicked();
 };
 #endif // MAINWINDOW_H

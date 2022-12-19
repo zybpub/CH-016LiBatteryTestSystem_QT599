@@ -8,13 +8,32 @@
 #include <QByteArray>
 #include <QFile>
 #include <QJsonArray>
-
+#include <Qtsql>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+
+    QLabel *per1 = new QLabel("四川启睿克科技有限公司", this);
+
+    QLabel *per2 = new QLabel("检测校准中心", this);
+
+    QLabel *per3 = new QLabel("V1.0", this);
+
+    statusBar()->addPermanentWidget(per1); //现实永久信息
+
+    statusBar()->addPermanentWidget(per2);
+
+    statusBar()->insertPermanentWidget(2, per3);
+
+
+
+   // statusBar()->showMessage("Status is here...", 3000); // 显示临时信息，时间3秒钟.
+
     remote_control=false;
 
 //    connect(ui->menu_modify,&QAction::triggered,this,config_wind_clicked());
@@ -34,6 +53,15 @@ MainWindow::MainWindow(QWidget *parent)
     read_json_data();
     //创建QTcpSocket对象，并初始化
     mSocket = new QTcpSocket;
+    //定时器
+    timer_meas = new QTimer(this);
+    connect(timer_meas,&QTimer::timeout,[=](){
+        if (cmd_mode==false){
+            msg = "MEAS?\n";
+            send_cmd(msg);
+            isRealData=true;
+        }
+    });
 }
 
 void MainWindow::read_json_data(){
@@ -51,40 +79,39 @@ void MainWindow::read_json_data(){
         qDebug()<<"配置错误";
         return;
     }
-    obj=doc.object();
-    if(obj.contains("充电"))
+    obj_main=doc.object();
+    if(obj_main.contains(ui->comboBox_BatType->currentText()))
     {
-        QJsonValue Temp=obj.value("充电");
-        QJsonObject objs=Temp.toObject();
+        QJsonObject qjobj=obj_main[ui->comboBox_BatType->currentText()].toObject();
+        if(qjobj.contains("充电"))
+        {
+            QJsonValue Temp=qjobj.value("充电");
+            QJsonObject objs=Temp.toObject();
+            ui->lineEdit_BattCap->setText(objs.value("电池容量").toString());
+            ui->lineEdit_chargeV->setText(objs.value("充电电压").toString());
+            ui->lineEdit_chargeC->setText(objs.value("充电电流").toString());
+            ui->lineEdit_chargeT->setText(objs.value("充电时间").toString());
+            ui->lineEdit_shutV->setText(objs.value("关断电压").toString());
+            ui->lineEdit_shutC->setText(objs.value("关断电流").toString());
+            ui->lineEdit_shutCap->setText(objs.value("关断容量").toString());
+        }
+        if(qjobj.contains("放电"))
+        {
+            QJsonValue Temp=qjobj.value("放电");
+            QJsonObject objs=Temp.toObject();
 
-        ui->lineEdit_chargeV->setText(objs.value("充电电压").toString());
-        ui->lineEdit_chargeC->setText(objs.value("充电电流").toString());
-        ui->lineEdit_chargeT->setText(objs.value("充电时间").toString());
-        ui->lineEdit_shutV->setText(objs.value("关断电压").toString());
-        ui->lineEdit_shutC->setText(objs.value("关断电流").toString());
-        ui->lineEdit_shutCap->setText(objs.value("关断容量").toString());
-
-//        QJsonValue genderTemp=objs.value("充电电流");
-//        QString gender=genderTemp.toString();
-
-//        QJsonValue chargeV=objs.value("充电时间");
-//        QString id=chargeV.toString();
+            ui->lineEdit_dischargeV->setText(objs.value("放电电压").toString());
+            ui->lineEdit_dischargeC->setText(objs.value("放电电流").toString());
+            ui->lineEdit_dischargeT->setText(objs.value("放电时间").toString());
+            ui->lineEdit_disshutV->setText(objs.value("关断电压").toString());
+            ui->lineEdit_disshutC->setText(objs.value("关断电流").toString());
+            ui->lineEdit_disshutCap->setText(objs.value("关断容量").toString());
+        }
     }
-    if(obj.contains("放电"))
-    {
-        QJsonValue Temp=obj.value("放电");
-        QJsonObject objs=Temp.toObject();
 
-        ui->lineEdit_dischargeV->setText(objs.value("放电电压").toString());
-        ui->lineEdit_dischargeC->setText(objs.value("放电电流").toString());
-        ui->lineEdit_dischargeT->setText(objs.value("放电时间").toString());
-        ui->lineEdit_disshutV->setText(objs.value("关断电压").toString());
-        ui->lineEdit_disshutC->setText(objs.value("关断电流").toString());
-        ui->lineEdit_disCap->setText(objs.value("关断容量").toString());
-    }
-    if(obj.contains("网络设置"))
+    if(obj_main.contains("网络设置"))
     {
-        QJsonValue Temp=obj.value("网络设置");
+        QJsonValue Temp=obj_main.value("网络设置");
         QJsonObject objs=Temp.toObject();
 
         ui->lineEdit_ip->setText(objs.value("ip").toString());
@@ -148,21 +175,21 @@ void MainWindow::connect_suc()
        send_cmd(msg);
     });
 
-    QTimer::singleShot(2000, this, [=](){
-        qDebug()<<"等待2秒";
-        //定时器
-        timer_meas = new QTimer(this);
-        //启动定时器
-        timer_meas->start(1000);
+//    QTimer::singleShot(2000, this, [=](){
+//        qDebug()<<"等待2秒";
+//        //定时器
+//        timer_meas = new QTimer(this);
+//        //启动定时器
+//        timer_meas->start(1000);
 
-        connect(timer_meas,&QTimer::timeout,[=](){
-            if (cmd_mode==false){
-                msg = "MEAS?\n";
-                send_cmd(msg);
-                isRealData=true;
-            }
-        });
-    });
+//        connect(timer_meas,&QTimer::timeout,[=](){
+//            if (cmd_mode==false){
+//                msg = "MEAS?\n";
+//                send_cmd(msg);
+//                isRealData=true;
+//            }
+//        });
+//    });
 
 
 }
@@ -404,7 +431,7 @@ void MainWindow::on_pushButton_Pri_Vol_clicked()
 
 void MainWindow::on_pushButton_Pri_Cur_clicked()
 {
-     msg = "FUNC:PRI Curr\n";
+     msg = "FUNC:PRI CURR\n";
     send_cmd(msg);
 }
 
@@ -464,9 +491,11 @@ void MainWindow::on_btn_shutCap_clicked()
    send_cmd(msg);
 }
 
-void MainWindow::on_pushButton_battOn_clicked()
+void MainWindow::on_pushButton_battOn_clicked() //启动充电模式
 {
-     msg = "BATT ON\n";
+    msg = "BATT:MODE CHAR\n";
+    send_cmd(msg);
+    msg = "BATT ON\n";
     send_cmd(msg);
 }
 
@@ -513,10 +542,10 @@ void MainWindow::on_pushButton_save_clicked()
     net.insert("ip",QJsonValue(ui->lineEdit_ip->text()));
     net.insert("端口",QJsonValue(ui->lineEdit_port->text()));
 
-    obj["网络设置"]=QJsonValue(net);
+    obj_main["网络设置"]=QJsonValue(net);
 
     //写入到文件，名字为info.json
-    QJsonDocument doc(obj);
+    QJsonDocument doc(obj_main);
     QByteArray data=doc.toJson();
     QFile file("info.json");
     bool ok=file.open(QIODevice::WriteOnly);
@@ -539,7 +568,7 @@ void MainWindow::on_pushButton_save_clicked()
 void MainWindow::on_pushButton_save_charge_clicked()
 {
    QJsonObject charge;
-
+   charge.insert("电池容量",QJsonValue(ui->lineEdit_BattCap->text()));
    charge.insert("充电电压",QJsonValue(ui->lineEdit_chargeV->text()));
    charge.insert("充电电流",QJsonValue(ui->lineEdit_chargeC->text()));
    charge.insert("充电时间",QJsonValue(ui->lineEdit_chargeT->text()));
@@ -549,10 +578,25 @@ void MainWindow::on_pushButton_save_charge_clicked()
    charge.insert("关断容量",QJsonValue(ui->lineEdit_shutCap->text()));
 
 
-   obj["充电"]=QJsonValue(charge);
+  obj_battype["充电"]=QJsonValue(charge);
+   obj_main[ui->comboBox_BatType->currentText()]=obj_battype;
 
+
+   QJsonObject discharge;
+
+   discharge.insert("放电电压",QJsonValue(ui->lineEdit_dischargeV->text()));
+   discharge.insert("放电电流",QJsonValue(ui->lineEdit_dischargeC->text()));
+   discharge.insert("放电时间",QJsonValue(ui->lineEdit_dischargeT->text()));
+
+   discharge.insert("关断电压",QJsonValue(ui->lineEdit_disshutV->text()));
+   discharge.insert("关断电流",QJsonValue(ui->lineEdit_disshutC->text()));
+   discharge.insert("关断容量",QJsonValue(ui->lineEdit_disshutCap->text()));
+
+
+   obj_battype["放电"]=QJsonValue(discharge);
+   obj_main[ui->comboBox_BatType->currentText()]=obj_battype;
    //写入到文件，名字为info.json
-   QJsonDocument doc(obj);
+   QJsonDocument doc(obj_main);
    QByteArray data=doc.toJson();
    QFile file("info.json");
    bool ok=file.open(QIODevice::WriteOnly);
@@ -572,21 +616,25 @@ void MainWindow::on_pushButton_save_charge_clicked()
 }
 void MainWindow::on_pushButton_save_discharge_clicked()
 {
-    QJsonObject charge;
+    QJsonObject discharge;
 
-    charge.insert("放电电压",QJsonValue(ui->lineEdit_dischargeV->text()));
-    charge.insert("放电电流",QJsonValue(ui->lineEdit_dischargeC->text()));
-    charge.insert("放电时间",QJsonValue(ui->lineEdit_dischargeT->text()));
+    discharge.insert("放电电压",QJsonValue(ui->lineEdit_dischargeV->text()));
+    discharge.insert("放电电流",QJsonValue(ui->lineEdit_dischargeC->text()));
+    discharge.insert("放电时间",QJsonValue(ui->lineEdit_dischargeT->text()));
 
-    charge.insert("关断电压",QJsonValue(ui->lineEdit_disshutV->text()));
-    charge.insert("关断电流",QJsonValue(ui->lineEdit_disshutC->text()));
-    charge.insert("关断容量",QJsonValue(ui->lineEdit_disCap->text()));
+    discharge.insert("关断电压",QJsonValue(ui->lineEdit_disshutV->text()));
+    discharge.insert("关断电流",QJsonValue(ui->lineEdit_disshutC->text()));
+    discharge.insert("关断容量",QJsonValue(ui->lineEdit_disshutCap->text()));
 
 
-    obj["放电"]=QJsonValue(charge);
+    obj_battype["放电"]=QJsonValue(discharge);
+    obj_main[ui->comboBox_BatType->currentText()]=obj_battype;
+    //obj_main.insert(ui->comboBox_BatType->currentText(),obj_battype);
+   // obj_main[ui->comboBox_BatType->currentText()].obj_battype;
+
 
     //写入到文件，名字为info.json
-    QJsonDocument doc(obj);
+    QJsonDocument doc(obj_main);
     QByteArray data=doc.toJson();
     QFile file("info.json");
     bool ok=file.open(QIODevice::WriteOnly);
@@ -608,8 +656,12 @@ void MainWindow::on_pushButton_save_discharge_clicked()
 
 void MainWindow::on_pushButton_battOn_discharge_clicked()
 {
-    msg = "BATT ON\n";
-    send_cmd(msg);
+    msg = "BATT OFF\n";
+   send_cmd(msg);
+    msg = "BATT:MODE DISC\n";  //放电模式
+   send_cmd(msg);
+   msg = "BATT ON\n";
+  send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_battOff__discharge_clicked()
@@ -665,4 +717,169 @@ void MainWindow::on_pushButton_query_outp_clicked()
 {
     msg = "outp?\n";
     send_cmd(msg);
+}
+
+void MainWindow::on_checkBox_RealDisp_stateChanged(int arg1)
+{
+    if(arg1 == 2) //表示被选中
+    {
+
+        //启动定时器
+        timer_meas->start(1000);
+
+    }
+    else if(arg1 == 0)
+    {
+       timer_meas->stop();
+    }
+}
+
+void MainWindow::on_pushButton_QueryBatMode_clicked()
+{
+    msg = "BATT:MODE?\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_pushButton_OpenUrl_clicked()
+{
+   // QDesktopServices::openUrl(QUrl(ui->lineEdit_ip->text(), QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("http://"+ui->lineEdit_ip->text()));
+}
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+
+}
+
+void MainWindow::on_comboBox_BatType_currentTextChanged(const QString &arg1)
+{
+    if(obj_main.contains(ui->comboBox_BatType->currentText()))
+    {
+        QJsonObject qjobj=obj_main[ui->comboBox_BatType->currentText()].toObject();
+        if(qjobj.contains("充电"))
+        {
+            QJsonValue Temp=qjobj.value("充电");
+            QJsonObject objs=Temp.toObject();
+            ui->lineEdit_BattCap->setText(objs.value("电池容量").toString());
+            ui->lineEdit_chargeV->setText(objs.value("充电电压").toString());
+            ui->lineEdit_chargeC->setText(objs.value("充电电流").toString());
+            ui->lineEdit_chargeT->setText(objs.value("充电时间").toString());
+            ui->lineEdit_shutV->setText(objs.value("关断电压").toString());
+            ui->lineEdit_shutC->setText(objs.value("关断电流").toString());
+            ui->lineEdit_shutCap->setText(objs.value("关断容量").toString());
+        }
+        if(qjobj.contains("放电"))
+        {
+            QJsonValue Temp=qjobj.value("放电");
+            QJsonObject objs=Temp.toObject();
+
+            ui->lineEdit_dischargeV->setText(objs.value("放电电压").toString());
+            ui->lineEdit_dischargeC->setText(objs.value("放电电流").toString());
+            ui->lineEdit_dischargeT->setText(objs.value("放电时间").toString());
+            ui->lineEdit_disshutV->setText(objs.value("关断电压").toString());
+            ui->lineEdit_disshutC->setText(objs.value("关断电流").toString());
+            ui->lineEdit_disshutCap->setText(objs.value("关断容量").toString());
+        }
+    }
+}
+
+void MainWindow::on_btn_setDisChargeV_clicked()
+{
+    msg = "BATT:DISC:VOLT "+ui->lineEdit_chargeV->text()+"\n";
+   send_cmd(msg);
+}
+
+void MainWindow::on_btn_DisshutV_clicked()
+{
+    msg = "BATT:DISC:VOLT "+ui->lineEdit_dischargeV->text()+"\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_btn_setDisChargeC_clicked()
+{
+    msg = "BATT:DISC:CURR "+ui->lineEdit_dischargeC->text()+"\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_btn_DisshutC_clicked()
+{
+    msg = "BATT:SHUT:CURR "+ui->lineEdit_disshutC->text()+"\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_btn_setDisChargeT_clicked()
+{
+    msg = "BATT:SHUT:TIME "+ui->lineEdit_dischargeT->text()+"\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_btn_DisshutCap_clicked()
+{
+    msg = "BATT:SHUT:CAP "+ui->lineEdit_disshutCap->text()+"\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_pushButton_OneKeyCharge_clicked()
+{
+    msg = "BATT OFF\n";
+   send_cmd(msg);
+
+    msg = "BATT:CHAR:VOLT "+ui->lineEdit_chargeV->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:CHAR:CURR "+ui->lineEdit_chargeC->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:TIME "+ui->lineEdit_chargeT->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:VOLT "+ui->lineEdit_shutV->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:CURR "+ui->lineEdit_shutC->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:CAP "+ui->lineEdit_shutCap->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:MODE CHAR\n";
+    send_cmd(msg);
+    msg = "BATT ON\n";
+    send_cmd(msg);
+
+    msg = "OUTP ON\n";
+    send_cmd(msg);
+}
+
+void MainWindow::on_pushButton_OneKeyDisCharge_clicked()
+{
+    msg = "BATT OFF\n";
+   send_cmd(msg);
+
+    msg = "BATT:DISC:VOLT "+ui->lineEdit_dischargeV->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:DISC:CURR "+ui->lineEdit_dischargeC->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:TIME "+ui->lineEdit_dischargeT->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:VOLT "+ui->lineEdit_disshutV->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:CURR "+ui->lineEdit_disshutC->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:SHUT:CAP "+ui->lineEdit_disshutCap->text()+"\n";
+    send_cmd(msg);
+
+    msg = "BATT:MODE DISC\n";  //放电模式
+   send_cmd(msg);
+   msg = "BATT ON\n";
+  send_cmd(msg);
+
+  msg = "OUTP ON\n";
+  send_cmd(msg);
+
 }
