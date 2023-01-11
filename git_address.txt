@@ -1,0 +1,2 @@
+public
+https://github.com/zybpub/CH-016LiBatteryTestSystem_QT599.git
