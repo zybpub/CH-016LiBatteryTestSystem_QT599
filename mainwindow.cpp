@@ -236,7 +236,7 @@ void MainWindow::send_cmd(QString cmd){
   //  qDebug()<<cmd;
    // timer_meas->stop();
     cmd_mode=true;
-     mSocket->write(cmd.toLatin1());
+     mSocket->write((cmd+"\n").toLatin1());
     debug("发送指令:"+cmd);
 
      QTimer::singleShot(3000, this, [=](){
@@ -493,15 +493,15 @@ void MainWindow::on_btn_shutCap_clicked()
 
 void MainWindow::on_pushButton_battOn_clicked() //启动充电模式
 {
-    msg = "BATT:MODE CHAR\n";
+    msg = "BATT:MODE CHAR";
     send_cmd(msg);
-    msg = "BATT ON\n";
+    msg = "BATT ON";
     send_cmd(msg);
 }
 
 void MainWindow::on_pushButton_busTrig_clicked()
 {
-     msg = "TRIG\n";
+     msg = "TRIG";
      send_cmd(msg);
 }
 
@@ -531,7 +531,7 @@ void MainWindow::on_btn_send_command_clicked()
 
 void MainWindow::on_pushButton_battOff_clicked()
 {
-     msg = "BATT OFF\n";
+     msg = "BATT OFF";
     send_cmd(msg);
 }
 
